@@ -1,0 +1,78 @@
+---
+- name: add docker apt key
+  apt_key:
+    id: 2C52609D
+    keyserver: keyserver.ubuntu.com
+    state: present
+  become: yes
+
+- name: add apt repository
+  apt_repository:
+    repo: 'deb https://apt.dockerproject.org/repo ubuntu-{{ ansible_distribution_release }} main'
+    update_cache: yes
+    state: present
+  become: yes
+
+- name: install docker dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+  become: yes
+  with_items: "{{ docker_required_packages }}"
+
+- name: install docker package
+  apt:
+    name: "{{ docker_package_name }}={{ docker_package_version }}"
+    state: present
+  become: yes
+
+- name: install docker client
+  pip:
+    name: "docker-py==1.9.0"
+    state: present
+  become: yes
+
+- name: cleanup docker files
+  file:
+    path: /etc/init.d/docker
+    state: absent
+  become: yes
+
+- name: configure docker package
+  template:
+    src: default/docker.j2
+    dest: /etc/default/docker
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  notify:
+    - restart docker
+
+- name: configure docker service
+  template:
+    src: init/docker.conf.j2
+    dest: /etc/init/docker.conf
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  notify:
+    - restart docker
+
+- name: register docker service
+  service:
+    name: docker
+    state: started
+  become: yes
+
+- name: login docker registry
+  docker_login:
+    registry: "{{ item }}"
+    username: "{{ docker_registry_username }}"
+    password: "{{ docker_registry_password }}"
+    email: "{{ docker_registry_email }}"
+  become: yes
+  with_items:
+    - https://index.docker.io/v1/
+    - thoughtworks.io:5000

@@ -1,0 +1,51 @@
+---
+- name: start rancher server container
+  docker:
+    name: "{{ rancher_name }}"
+    image: "rancher/server:{{ rancher_version }}"
+    ports:
+      - "{{ rancher_port }}:8080"
+    volumes:
+      - "/var/lib/mysql:/var/lib/mysql"
+    restart_policy: always
+  become: yes
+
+- name: wait for the rancher server to start
+  command: "docker logs {{ rancher_name }}"
+  register: rancher_logs
+  until: rancher_logs.stdout.find("Listening on") != -1
+  retries: 30
+  delay: 10
+
+- name: check the rancher server auth status
+  uri:
+    method: GET
+    url: "http://10.245.6.2:8080/v1"
+    status_code: 401
+  register: rancher_auth_enabled
+  ignore_errors: yes
+
+- name: add api access key to admin account
+  uri:
+    method: POST
+    url: "http://10.245.6.2:8080/v1/apikeys"
+    force_basic_auth: yes
+    user: "admin"
+    password: "admin"
+    body: '{"accountId": "1a1","description": "provisioner","name": "provisioner","publicValue": "admin","secretValue": "admin"}'
+    body_format: json
+    status_code: 201
+  register: rancher_auth_config
+  when: rancher_auth_enabled|failed
+
+- name: enable local authentication and setup rancher server admin user
+  uri:
+    method: POST
+    url: "http://10.245.6.2:8080/v1/localauthconfig"
+    force_basic_auth: yes
+    user: "admin"
+    password: "admin"
+    body: '{"accessMode": "restricted","enabled": true,"name": "admin","password": "admin","username": "admin"}'
+    body_format: json
+    status_code: 201
+  when: rancher_auth_enabled|failed

@@ -1,0 +1,5 @@
+---
+# ansible groups for service configuration
+consul_masters_group: role=control
+mesos_masters_group: role=control
+etcd_servers_group: role=control

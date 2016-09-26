@@ -1,0 +1,12 @@
+---
+# docker-engine is the default package name
+docker_package_name: docker-engine
+docker_package_version: 1.10.3-0~trusty
+
+# daemon options
+docker_daemon_opts: --registry-mirror=http://fly2wind.m.alauda.cn
+
+# registry
+docker_registry_email:    fly2wind@gmail.com
+docker_registry_username: fly2wind
+docker_registry_password: pwc502r

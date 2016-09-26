@@ -1,0 +1,32 @@
+---
+- hosts: all
+  become: true
+  gather_facts: yes
+  pre_tasks:
+    - name: setting host facts
+      set_fact:
+        public_ipv4:  "{{ ansible_eth1.ipv4.address }}"
+        private_ipv4: "{{ ansible_eth1.ipv4.address }}"
+  vars:
+    docker_daemon_opts: "--registry-mirror=https://thoughtworks.io:5000"
+  roles:
+    - common
+    - docker
+
+- hosts: role=repository
+  become: true
+  gather_facts: no
+  roles:
+    - artifactory
+
+- hosts: role=master
+  become: true
+  gather_facts: no
+  roles:
+    - rancher
+
+- hosts: role=slaves
+  become: true
+  gather_facts: no
+  roles:
+    - rancher-agent

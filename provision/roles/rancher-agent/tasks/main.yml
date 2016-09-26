@@ -1,0 +1,40 @@
+---
+- name: Get the default project id
+  uri:
+    method: GET
+    url: "http://10.245.6.2:8080/v1/projects"
+    force_basic_auth: yes
+    user: "admin"
+    password: "admin"
+    status_code: 200
+  register: project_id
+
+- name: Return the registration token URL of Rancher server
+  uri:
+    method: POST
+    url: "http://10.245.6.2:8080/v1/registrationtokens?projectId={{ project_id.json['data'][0]['id'] }}"
+    force_basic_auth: yes
+    user: "admin"
+    password: "admin"
+    status_code: 201
+  register: rancher_token_url
+
+- name: Return the registration URL of Rancher server
+  uri:
+    method: GET
+    url: "{{ rancher_token_url.json['links']['self'] }}"
+    force_basic_auth: yes
+    user: "admin"
+    password: "admin"
+    status_code: 200
+  register: rancher_token
+
+
+- name: Register the Host machine with the Rancher server
+  docker:
+    image: rancher/agent:v1.0.2
+    privileged: yes
+    detach: True
+    volumes: /var/run/docker.sock:/var/run/docker.sock
+    command: "{{ rancher_token.json['registrationUrl'] }}"
+    state: started

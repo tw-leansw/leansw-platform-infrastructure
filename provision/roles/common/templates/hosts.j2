@@ -1,0 +1,6 @@
+127.0.0.1   localhost 
+{% for item in groups['all'] %}
+{% if hostvars[item].private_ipv4 is defined %}
+{{ hostvars[item].private_ipv4 }} {{ item }}
+{% endif %}
+{% endfor %}

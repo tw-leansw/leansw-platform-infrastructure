@@ -1,0 +1,7 @@
+---
+# image
+nexus_name: nexus-server
+nexus_version: 3.0
+
+# network
+nexus_port: 8081

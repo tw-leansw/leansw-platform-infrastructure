@@ -1,0 +1,33 @@
+---
+- name: install package
+  apt:
+    name: "{{ item }}"
+    force: yes
+    state: present
+  become: yes
+  with_items: "{{ packages.deb }}"
+  when: "{{ ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' }}"
+
+- name: install pip
+  pip:
+    name: pip
+    state: latest
+  become: yes
+
+- name: configure system hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
+  become: yes
+
+- name: configure system hosts
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+    mode: 0644
+  become: yes
+
+- name: configure system authorizedkey
+  authorized_key:
+    key: "{{ lookup('file', '/Users/qsma/.ssh/id_rsa.pub') }}"
+    user: root
+  become: yes

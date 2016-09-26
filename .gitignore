@@ -1,0 +1,13 @@
+/.bundle
+.DS_Store
+/db/*.sqlite3
+/log/*.log
+/tmp
+/public/system
+.sass-cache
+.idea/*
+tags
+coverage
+/db/schema.rb
+/db/projects
+/db/gab.yaml
