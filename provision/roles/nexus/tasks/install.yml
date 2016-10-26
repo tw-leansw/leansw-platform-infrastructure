@@ -1,0 +1,29 @@
+---
+- name: create nexus data directory
+  file:
+    path: "{{ nexus_data_dir }}"
+    state: "directory"
+    owner: root
+    group: root
+  become: yes
+
+- name: check nexus data directory
+  command: "ls {{ nexus_data_dir }}"
+  register: nexus_data_dir_contents
+
+- name: start nexus server container
+  docker_container:
+    name: "{{ nexus_name }}"
+    image: "baselibrary/nexus:{{ nexus_version }}"
+    ports:
+      - "{{ nexus_port }}:8081"
+    volumes:
+      - "{{ nexus_data_dir }}:/usr/share/nexus/data"
+    restart_policy: always
+  become: yes
+
+- name: wait for nexus server to be ready...
+  wait_for:
+    path: "{{ nexus_data_dir }}/log/nexus.log"
+    search_regex: "Started Sonatype Nexus .*"
+    timeout: 1800

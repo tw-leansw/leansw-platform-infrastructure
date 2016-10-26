@@ -1,33 +1,24 @@
 ---
-- name: install package
-  apt:
-    name: "{{ item }}"
-    force: yes
-    state: present
-  become: yes
-  with_items: "{{ packages.deb }}"
-  when: "{{ ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' }}"
+- debug: var={{ hostvars }}
 
-- name: install pip
-  pip:
-    name: pip
-    state: latest
-  become: yes
+- name: gather os specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution|lower }}-{{ ansible_distribution_version|lower|replace('/', '_') }}.yml"
+    - "{{ ansible_distribution|lower }}-{{ ansible_distribution_release }}.yml"
+    - "{{ ansible_distribution|lower }}-{{ ansible_distribution_major_version|lower|replace('/', '_') }}.yml"
+    - "{{ ansible_distribution|lower }}.yml"
+    - "{{ ansible_os_family|lower }}.yml"
+    - main.yml
 
-- name: configure system hostname
-  hostname:
-    name: "{{ inventory_hostname }}"
-  become: yes
+- include: install.yml
+  tags:
+    - development
+    - common
+    - install
 
-- name: configure system hosts
-  template:
-    src: hosts.j2
-    dest: /etc/hosts
-    mode: 0644
-  become: yes
-
-- name: configure system authorizedkey
-  authorized_key:
-    key: "{{ lookup('file', '/Users/qsma/.ssh/id_rsa.pub') }}"
-    user: root
-  become: yes
+- include: config.yml
+  tags:
+    - development
+    - common
+    - config

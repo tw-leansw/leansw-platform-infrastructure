@@ -1,0 +1,3 @@
+---
+- name: "config docker in {{ ansible_distribution|lower }} system"
+  include: "config/{{ ansible_os_family|lower }}.yml"

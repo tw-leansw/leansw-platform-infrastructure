@@ -1,0 +1,23 @@
+---
+- name: prepare docker package
+  copy:
+    src: "{{ item }}"
+    dest: /tmp
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - "{{ ansible_distribution }}/docker-1.12.1-153.1.x86_64.rpm"
+    - "{{ ansible_distribution }}/containerd-0.2.3-24.3.x86_64.rpm"
+    - "{{ ansible_distribution }}/runc-0.1.1+gitcc29e3d-21.1.x86_64.rpm"
+    - "{{ ansible_distribution }}/python-backports.ssl_match_hostname-3.5.0.1-1.1.noarch.rpm"
+    - "{{ ansible_distribution }}/python-websocket-client-0.32.0-3.1.noarch.rpm"
+    - "{{ ansible_distribution }}/python-setuptools-20.2.2-2.1.noarch.rpm"
+    - "{{ ansible_distribution }}/python-ipaddress-1.0.16-2.1.noarch.rpm"
+    - "{{ ansible_distribution }}/python-requests-2.9.1-1.1.noarch.rpm"
+    - "{{ ansible_distribution }}/python-docker-py-1.8.1-2.1.noarch.rpm"
+  become: yes
+
+- name: install docker package
+  shell: "zypper --no-gpg-checks --non-interactive install bridge-utils /tmp/python-*.rpm /tmp/runc-*.rpm /tmp/containerd-*.rpm /tmp/docker-*.rpm"
+  become: yes

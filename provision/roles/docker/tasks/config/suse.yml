@@ -1,0 +1,9 @@
+- name: configure docker package
+  template:
+    src: suse/default/docker.j2
+    dest: /etc/default/docker
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  notify: restart docker

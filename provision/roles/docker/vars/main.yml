@@ -1,5 +1,1 @@
 ---
-docker_required_packages:
-  - ca-certificates
-  - apt-transport-https
-  - linux-image-extra-{{ ansible_kernel }}

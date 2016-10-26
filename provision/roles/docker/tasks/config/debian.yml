@@ -1,0 +1,28 @@
+---
+- name: cleanup docker files
+  file:
+    path: /etc/init.d/docker
+    state: absent
+  become: yes
+
+- name: configure docker package
+  template:
+    src: debian/default/docker.j2
+    dest: /etc/default/docker
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  notify:
+    - restart docker
+
+- name: configure docker service
+  template:
+    src: debian/init/docker.conf.j2
+    dest: /etc/init/docker.conf
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  notify:
+    - restart docker

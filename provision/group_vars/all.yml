@@ -1,5 +1,18 @@
 ---
 # ansible groups for service configuration
-consul_masters_group: role=control
-mesos_masters_group: role=control
-etcd_servers_group: role=control
+auth_ldap: no
+auth_ldap_uri: "ldaps://10.29.1.1"
+auth_ldap_base_dn: ""
+auth_ldap_bind_dn: ""
+auth_ldap_bind_password: ""
+auth_ldap_user_search: ""
+auth_ldap_group_search: ""
+
+auth_local: yes
+auth_local_admin_fullname: admin
+auth_local_admin_username: admin
+auth_local_admin_password: admin
+
+auth_github: no
+auth_github_client_id: admin
+auth_github_client_secret: admin

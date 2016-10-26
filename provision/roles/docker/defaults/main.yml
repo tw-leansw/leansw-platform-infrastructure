@@ -1,7 +1,5 @@
 ---
-# docker-engine is the default package name
-docker_package_name: docker-engine
-docker_package_version: 1.10.3-0~trusty
+docker_version: 1.10.3
 
 # daemon options
 docker_daemon_opts: --registry-mirror=http://fly2wind.m.alauda.cn

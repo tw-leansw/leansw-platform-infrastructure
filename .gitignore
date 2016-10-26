@@ -4,6 +4,7 @@
 /log/*.log
 /tmp
 /public/system
+.vagrant
 .sass-cache
 .idea/*
 tags

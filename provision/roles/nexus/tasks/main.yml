@@ -1,11 +1,6 @@
 ---
-- name: start nexus server container
-  docker:
-    name: "{{ nexus_name }}"
-    image: "baselibrary/nexus:{{ nexus_version }}"
-    ports:
-      - "{{ nexus_port }}:8081"
-    volumes:
-      - "/var/lib/nexus:/var/lib/nexus"
-    restart_policy: always
-  become: yes
+
+
+- include: install.yml
+
+- include: config.yml
