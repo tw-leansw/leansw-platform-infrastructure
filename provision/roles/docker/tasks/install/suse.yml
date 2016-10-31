@@ -1,4 +1,11 @@
 ---
+- name: install docker dependencies
+  zypper:
+    name: "{{ item }}"
+    state: present
+  become: yes
+  with_items: "{{ docker_required_packages }}"
+
 - name: prepare docker package
   copy:
     src: "{{ item }}"
@@ -19,5 +26,5 @@
   become: yes
 
 - name: install docker package
-  shell: "zypper --no-gpg-checks --non-interactive install bridge-utils /tmp/python-*.rpm /tmp/runc-*.rpm /tmp/containerd-*.rpm /tmp/docker-*.rpm"
+  shell: "zypper --no-gpg-checks --non-interactive install /tmp/python-*.rpm /tmp/runc-*.rpm /tmp/containerd-*.rpm /tmp/docker-*.rpm"
   become: yes
