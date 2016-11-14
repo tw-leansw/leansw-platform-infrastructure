@@ -1,30 +1,63 @@
 ---
-- name: install docker dependencies
-  zypper:
-    name: "{{ item }}"
-    state: present
-  become: yes
-  with_items: "{{ docker_required_packages }}"
+- block:
+  - name: add docker apt key
+    rpm_key:
+      key: http://download.opensuse.org/repositories/Virtualization:/containers/SLE_12_SP1//repodata/repomd.xml.key
+      state: present
+    become: yes
 
-- name: prepare docker package
-  copy:
-    src: "{{ item }}"
-    dest: /tmp
-    owner: root
-    group: root
-    mode: 0755
-  with_items:
-    - "{{ ansible_distribution }}/docker-1.12.1-153.1.x86_64.rpm"
-    - "{{ ansible_distribution }}/containerd-0.2.3-24.3.x86_64.rpm"
-    - "{{ ansible_distribution }}/runc-0.1.1+gitcc29e3d-21.1.x86_64.rpm"
-    - "{{ ansible_distribution }}/python-backports.ssl_match_hostname-3.5.0.1-1.1.noarch.rpm"
-    - "{{ ansible_distribution }}/python-websocket-client-0.32.0-3.1.noarch.rpm"
-    - "{{ ansible_distribution }}/python-setuptools-20.2.2-2.1.noarch.rpm"
-    - "{{ ansible_distribution }}/python-ipaddress-1.0.16-2.1.noarch.rpm"
-    - "{{ ansible_distribution }}/python-requests-2.9.1-1.1.noarch.rpm"
-    - "{{ ansible_distribution }}/python-docker-py-1.8.1-2.1.noarch.rpm"
-  become: yes
+  - name: add docker apt repository
+    zypper_repository:
+      name: "Virtualization:containers.repo"
+      repo: "http://download.opensuse.org/repositories/Virtualization:containers/SLE_12_SP1"
+      state: present
+    become: yes
 
-- name: install docker package
-  shell: "zypper --no-gpg-checks --non-interactive install /tmp/python-*.rpm /tmp/runc-*.rpm /tmp/containerd-*.rpm /tmp/docker-*.rpm"
-  become: yes
+  - name: install docker dependencies
+    zypper:
+      name: "{{ item }}"
+      state: present
+    become: yes
+    with_items: "{{ docker_required_packages }}"
+
+  - name: install docker package
+    zypper:
+      name: "{{ docker_package_name }}={{ docker_package_version }}"
+      oldpackage: yes
+      state: present
+    become: yes
+
+  - name: install pip
+    easy_install:
+      name: pip
+      state: latest
+    become: yes
+
+  - name: install docker client
+    pip:
+      name: docker-py
+      state: present
+    become: yes
+  when: not docker_rpmpackage
+
+- block:
+  - name: prepare docker packages
+    copy:
+      src: "{{ ansible_distribution }}/{{ item }}"
+      dest: "/tmp/{{ item }}"
+      owner: root
+      group: root
+      mode: 0755
+      force: no
+    with_items: "{{ docker_rpm_packages }}"
+    become: yes
+
+  - name: install docker packages
+    zypper:
+      name: "/tmp/{{ item }}"
+      disable_gpg_check: yes
+      force: yes
+      state: present
+    with_items: "{{ docker_rpm_packages }}"
+    become: yes
+  when: docker_rpmpackage

@@ -26,4 +26,5 @@
   wait_for:
     path: "{{ nexus_data_dir }}/log/nexus.log"
     search_regex: "Started Sonatype Nexus .*"
-    timeout: 1800
+    timeout: 300
+  when: nexus_data_dir_contents.stdout == ""

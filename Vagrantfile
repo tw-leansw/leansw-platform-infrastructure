@@ -36,11 +36,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # box
   #config.vm.box              = "debian/jessie64"
   #config.vm.box              = "ubuntu/trusty64"
-  config.vm.box              = "trueability/sles-12-sp1"
+  config.vm.box              = "suse/sles12sp1"
   #config.vm.box              = "centos/7"
   config.vm.box_check_update = false
   # ssh
-  config.ssh.username         = 'root'
+  config.ssh.username         = 'vagrant'
   config.ssh.insert_key       = false
   config.ssh.forward_agent    = true
   config.ssh.private_key_path = ["#{ENV['HOME']}/.ssh/id_rsa", "#{ENV['HOME']}/.vagrant.d/insecure_private_key"]

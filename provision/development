@@ -1,12 +1,12 @@
 [role=master]
-master-1 ansible_ssh_host=10.245.6.2
+master-1 ansible_host=10.245.6.2 ansible_user=root ansible_ssh_private_key_file=~/.ssh/id_rsa
 
 [role=slaves]
-slave-1 ansible_ssh_host=10.245.6.3
-slave-2 ansible_ssh_host=10.245.6.4
+slave-1 ansible_host=10.245.6.3
+slave-2 ansible_host=10.245.6.4
 
 [role=database]
-master-1 ansible_ssh_host=10.245.6.2
+master-1 ansible_host=10.245.6.2
 
 [role=repository]
-master-1 ansible_ssh_host=10.245.6.2
+master-1 ansible_host=10.245.6.2

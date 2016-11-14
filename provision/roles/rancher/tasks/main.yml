@@ -1,6 +1,6 @@
 ---
 - name: start rancher server container
-  docker:
+  docker_container:
     name: "{{ rancher_name }}"
     image: "rancher/server:{{ rancher_version }}"
     ports:

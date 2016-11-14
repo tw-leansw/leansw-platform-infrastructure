@@ -27,7 +27,7 @@
     - docker
     - service
 
-- include: service.yml
+- include: manage.yml
   tags:
     - development
     - docker

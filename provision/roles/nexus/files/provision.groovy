@@ -34,10 +34,10 @@ repository.createMavenProxy('maven-central', 'https://jcenter.bintray.com/', Blo
 repository.createMavenGroup('maven-public', ['maven-releases', 'maven-snapshot', 'maven-central'])
 
 // docker
-repository.createDockerHosted('docker-releases', 0, 5001)
-repository.createDockerHosted('docker-snapshot', 0, 5002)
+repository.createDockerHosted('docker-releases', 5001, 0)
+repository.createDockerHosted('docker-snapshot', 5002, 0)
 repository.createDockerProxy('docker-central', 'https://registry-1.docker.io/', 'REGISTRY', '', 0, 0)
-repository.createDockerGroup('docker-public', 0, 5000, ['docker-releases','docker-snapshot','docker-central'])
+repository.createDockerGroup('docker-public', 5000, 0, ['docker-releases','docker-snapshot','docker-central'])
 
 // npm
 repository.createNpmHosted('npm-releases')
