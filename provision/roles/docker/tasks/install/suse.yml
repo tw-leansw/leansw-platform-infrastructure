@@ -2,14 +2,14 @@
 - block:
   - name: add docker apt key
     rpm_key:
-      key: http://download.opensuse.org/repositories/Virtualization:/containers/SLE_12_SP1//repodata/repomd.xml.key
+      key: http://download.opensuse.org/repositories/Virtualization:/containers/openSUSE_Leap_42.1/repodata/repomd.xml.key
       state: present
     become: yes
 
   - name: add docker apt repository
     zypper_repository:
-      name: "Virtualization:containers.repo"
-      repo: "http://download.opensuse.org/repositories/Virtualization:containers/SLE_12_SP1"
+      name: Virtualization:containers.repo
+      repo: http://download.opensuse.org/repositories/Virtualization:/containers/openSUSE_Leap_42.1/
       state: present
     become: yes
 
@@ -43,7 +43,7 @@
 - block:
   - name: prepare docker packages
     copy:
-      src: "{{ ansible_distribution }}/{{ item }}"
+      src: "{{ ansible_os_family|lower }}/{{ item }}"
       dest: "/tmp/{{ item }}"
       owner: root
       group: root
@@ -52,12 +52,20 @@
     with_items: "{{ docker_rpm_packages }}"
     become: yes
 
+  - name: install docker dependencies
+    zypper:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ docker_required_packages }}"
+    become: yes
+
   - name: install docker packages
     zypper:
       name: "/tmp/{{ item }}"
       disable_gpg_check: yes
       force: yes
-      state: present
-    with_items: "{{ docker_rpm_packages }}"
+      state: installed
+    with_items: "{{docker_rpm_packages}}"
+    ignore_errors: yes
     become: yes
   when: docker_rpmpackage

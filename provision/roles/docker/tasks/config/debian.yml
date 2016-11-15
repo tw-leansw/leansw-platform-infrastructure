@@ -5,24 +5,38 @@
     state: absent
   become: yes
 
-- name: configure docker package
+- name: configure docker upstart service
   template:
     src: debian/default/docker.j2
     dest: /etc/default/docker
     owner: root
     group: root
     mode: 0644
-  become: yes
+  when: ansible_service_mgr == "upstart"
   notify:
     - restart docker
+  become: yes
 
-- name: configure docker service
+- name: ensure docker systemd service directory
+  file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+  when: ansible_service_mgr == "systemd"
+  become: yes
+
+- name: configure docker systemd service
   template:
-    src: debian/init/docker.conf.j2
-    dest: /etc/init/docker.conf
+    src: debian/systemd/docker-systemd-service.j2
+    dest: /etc/systemd/system/docker.service.d/override.conf
     owner: root
     group: root
     mode: 0644
-  become: yes
+  when: ansible_service_mgr == "systemd"
+  register: dropinfile
   notify:
     - restart docker
+  become: yes
+
+- name: reload systemd
+  command: 'systemctl daemon-reload'
+  when: ansible_service_mgr == "systemd" and dropinfile.changed

@@ -26,6 +26,8 @@ if (repository.getRepositoryManager().get('nuget-group') != null) {
   repository.getRepositoryManager().delete('nuget-group')
 }
 
+security.addUser('fly2wind', 'Docker', 'User', 'fly2wind@gmail.com', true, 'changeme', ['nx-admin'])
+
 // maven
 repository.createMavenHosted('maven-releases', BlobStoreManager.DEFAULT_BLOBSTORE_NAME, true, VersionPolicy.RELEASE, WritePolicy.ALLOW_ONCE, LayoutPolicy.STRICT)
 repository.createMavenHosted('maven-snapshot', BlobStoreManager.DEFAULT_BLOBSTORE_NAME, true, VersionPolicy.SNAPSHOT, WritePolicy.ALLOW, LayoutPolicy.STRICT)

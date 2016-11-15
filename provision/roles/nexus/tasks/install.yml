@@ -17,6 +17,9 @@
     image: "baselibrary/nexus:{{ nexus_version }}"
     ports:
       - "{{ nexus_port }}:8081"
+      - 5000:5000
+      - 5001:5001
+      - 5002:5002
     volumes:
       - "{{ nexus_data_dir }}:/usr/share/nexus/data"
     restart_policy: always

@@ -7,33 +7,23 @@
       set_fact:
         public_ipv4:  "{{ ansible_eth1.ipv4.address }}"
         private_ipv4: "{{ ansible_eth1.ipv4.address }}"
-  tasks:
-    - name: use setup module to list os distribution
-      setup: filter=ansible_distribution
-  vars:
-    docker_registry: "daimler-mme.ga:5000"
-    docker_opts: "--registry-mirror=http://master-1:5000 --insecure-registry=master-1:5000"
-    docker_registries:
-      - host: "https://index.docker.io/v1/"
-        auth: "Zmx5MndpbmQ6cHdjNTAycg=="
-        email: "fly2wind@gmail.com"
   roles:
     - common
     - docker
 
-- hosts: role=repository
+- hosts: repository
   become: true
   gather_facts: no
   roles:
     - nexus
 
-- hosts: role=master
+- hosts: master
   become: true
   gather_facts: no
   roles:
     - rancher
 
-- hosts: role=slaves
+- hosts: slaves
   become: true
   gather_facts: no
   roles:

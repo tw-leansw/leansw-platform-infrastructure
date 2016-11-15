@@ -20,7 +20,7 @@
 - name: check the rancher server auth status
   uri:
     method: GET
-    url: "http://10.245.6.2:8080/v1"
+    url: "http://127.0.0.1:8080/v1"
     status_code: 401
   register: rancher_auth_enabled
   ignore_errors: yes
@@ -28,7 +28,7 @@
 - name: add api access key to admin account
   uri:
     method: POST
-    url: "http://10.245.6.2:8080/v1/apikeys"
+    url: "http://127.0.0.1:8080/v1/apikeys"
     force_basic_auth: yes
     user: "admin"
     password: "admin"
@@ -41,7 +41,7 @@
 - name: enable local authentication and setup rancher server admin user
   uri:
     method: POST
-    url: "http://10.245.6.2:8080/v1/localauthconfig"
+    url: "http://127.0.0.1:8080/v1/localauthconfig"
     force_basic_auth: yes
     user: "admin"
     password: "admin"

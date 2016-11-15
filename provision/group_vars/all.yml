@@ -16,3 +16,7 @@ auth_local_admin_password: admin
 auth_github: no
 auth_github_client_id: admin
 auth_github_client_secret: admin
+
+# dns
+host_dns: true
+host_dns_domain: thoughtworks.local

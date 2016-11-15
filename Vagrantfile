@@ -15,14 +15,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 ###############################################################################
 # Global plugin settings                                                      #
 ###############################################################################
-  #if Vagrant.has_plugin?("vagrant-cachier")
-  #  config.cache.scope = :box
-  #  config.cache.auto_detect = true
-  #  config.cache.synced_folder_opts = {
-  #    type: :nfs,
-  #    mount_options: ['rw', 'vers=3', 'tcp', 'nolock']
-  #  }
-  #end
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :box
+    config.cache.auto_detect = true
+    config.cache.synced_folder_opts = {
+      type: :nfs,
+      mount_options: ['rw', 'vers=3', 'tcp', 'nolock']
+    }
+  end
   if Vagrant.has_plugin?("vagrant-vbguest")
     config.vbguest.auto_update = false
     config.vbguest.no_remote = true
@@ -34,9 +34,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # box
-  #config.vm.box              = "debian/jessie64"
+  config.vm.box              = "debian/jessie64"
   #config.vm.box              = "ubuntu/trusty64"
-  config.vm.box              = "suse/sles12sp1"
+  #config.vm.box              = "opensuse/openSUSE-42.1-x86_64"
+  #config.vm.box              = "trueability/sles-12-sp1"
   #config.vm.box              = "centos/7"
   config.vm.box_check_update = false
   # ssh

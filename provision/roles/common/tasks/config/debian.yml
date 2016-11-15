@@ -1,6 +1,1 @@
 ---
-- name: configure system authorizedkey
-  authorized_key:
-    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-    user: root
-  become: yes

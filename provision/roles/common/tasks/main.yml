@@ -1,6 +1,4 @@
 ---
-- debug: var={{ hostvars }}
-
 - name: gather os specific variables
   include_vars: "{{ item }}"
   with_first_found:

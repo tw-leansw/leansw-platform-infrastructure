@@ -1,6 +1,3 @@
 ---
-packages:
-  deb:
-    - ntp
-    - ntpdate
-    - python-pip
+host_dns: no
+host_dns_domain: thoughtworks.local
