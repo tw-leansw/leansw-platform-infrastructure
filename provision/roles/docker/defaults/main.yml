@@ -13,3 +13,6 @@ docker_opts: --registry-mirror=http://fly2wind.m.alauda.cn
 #   - host: docker.chatid.com
 #     auth: path/to/ca.crt
 docker_registries: []
+
+#  additonal directory
+# docker_additonal_directory:

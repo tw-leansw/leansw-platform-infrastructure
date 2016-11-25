@@ -1,35 +1,25 @@
 ---
-- name: remove nexus server groovy script
-  uri:
-    url: "http://localhost:8081/service/siesta/rest/v1/script/provision"
-    method: DELETE
-    user: "{{ nexus_admin_user }}"
-    password: "{{ nexus_admin_pass }}"
-    force_basic_auth: yes
-    status_code: 204,404
+- include: config/privileges.yml
 
-- name: publish nexus server groovy script
-  uri:
-    url: "http://localhost:8081/service/siesta/rest/v1/script"
-    method: POST
-    user: "{{ nexus_admin_user }}"
-    password: "{{ nexus_admin_pass }}"
-    force_basic_auth: yes
-    body:
-      name: "provision"
-      type: "groovy"
-      content: "{{ lookup('template', 'provision.groovy.j2') }}"
-    body_format: json
-    status_code: 204
+- include: config/roles.yml
 
-- name: execute nexus server groovy script
-  uri:
-    url: "http://localhost:8081/service/siesta/rest/v1/script/provision/run"
-    method: POST
-    user: "{{ nexus_admin_user }}"
-    password: "{{ nexus_admin_pass }}"
-    force_basic_auth: yes
-    headers:
-      Content-Type: "text/plain"
-    status_code: 200
-  when: nexus_data_dir_contents.stdout == ""
+- include: config/users.yml
+
+- include: config/repositories.yml
+
+
+
+
+
+
+#- name: execute nexus server groovy script
+#  uri:
+#    url: "http://localhost:8081/service/siesta/rest/v1/script/provision/run"
+#    method: POST
+#    user: "{{ nexus_admin_user }}"
+#    password: "{{ nexus_admin_pass }}"
+#    force_basic_auth: yes
+#    headers:
+#      Content-Type: "text/plain"
+#    status_code: 200
+#  when: nexus_data_dir_contents.stdout == ""

@@ -6,7 +6,7 @@
     ports:
       - "{{ rancher_port }}:8080"
     volumes:
-      - "/var/lib/mysql:/var/lib/mysql"
+      - "{{ rancher_data_dir }}:/var/lib/mysql"
     restart_policy: always
   become: yes
 

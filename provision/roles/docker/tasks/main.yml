@@ -9,6 +9,12 @@
     - "{{ ansible_os_family|lower }}.yml"
     - main.yml
 
+- include: additional.yml
+  tags:
+    - development
+    - docker
+    - additional
+
 - include: install.yml
   tags:
     - development

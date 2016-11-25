@@ -8,3 +8,4 @@ docker_required_packages:
   - apt-transport-https
   - linux-image-extra-{{ ansible_kernel }}
   - linux-image-extra-virtual
+  - python-setuptools
