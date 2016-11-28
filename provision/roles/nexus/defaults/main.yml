@@ -41,6 +41,8 @@ nexus_local_users: []
 #    roles:
 #      - developers
 
+# nexus dns
+nexus_dns: dnspod
 
 # branding
 nexus_branding_header: ""

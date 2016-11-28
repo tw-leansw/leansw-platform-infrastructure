@@ -8,10 +8,6 @@
 - include: config/repositories.yml
 
 
-
-
-
-
 #- name: execute nexus server groovy script
 #  uri:
 #    url: "http://localhost:8081/service/siesta/rest/v1/script/provision/run"
