@@ -41,6 +41,7 @@
         roles:
           - nx-admin
   roles:
+    - ldap
     - nexus
 
 - hosts: master
