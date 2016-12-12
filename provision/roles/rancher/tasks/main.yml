@@ -38,14 +38,26 @@
   register: rancher_auth_config
   when: rancher_auth_enabled|failed
 
-- name: enable local authentication and setup rancher server admin user
+- name: enable ldap authentication
   uri:
     method: POST
-    url: "http://127.0.0.1:8080/v1/localauthconfig"
+    url: "http://127.0.0.1:8080/v1/openldapconfigs"
     force_basic_auth: yes
     user: "admin"
     password: "admin"
-    body: '{"accessMode": "restricted","enabled": true,"name": "admin","password": "admin","username": "admin"}'
+    body: "{{ rancher_ldap_auth_body | to_json }}"
     body_format: json
     status_code: 201
+  when: rancher_auth_enabled|failed
+
+- name: enable ldap admin user
+  uri:
+    method: PUT
+    url: "http://127.0.0.1:8080/v1/accounts/1a1"
+    force_basic_auth: yes
+    user: "admin"
+    password: "admin"
+    body: "{{ rancher_ldap_admin_body | to_json }}"
+    body_format: json
+    status_code: 200
   when: rancher_auth_enabled|failed

@@ -1,9 +1,38 @@
 ---
 # image
 rancher_name: rancher-server
-rancher_version: v1.1.3
+rancher_version: v1.2.0
 
 # network
 rancher_port: 8080
 
 rancher_data_dir: "/var/lib/mysql"
+
+
+
+rancher_ldap_auth_body:
+  accessMode: "unrestricted"
+  server: "10.205.4.1"
+  port: 389
+  tls: false
+  enabled: true
+  serviceAccountUsername: "username@domain.com"
+  serviceAccountPassword: "password"
+  domain: "DC=domain,DC=com"
+  userObjectClass: "person"
+  userLoginField: "sAMAccountName"
+  userNameField: "name"
+  userSearchField: "sAMAccountName"
+  userEnabledAttribute: "userAccountControl"
+  userDisabledBitMask: 2
+  groupObjectClass: "group"
+  groupNameField: "name"
+  groupSearchField: "sAMAccountName"
+  groupMemberMappingAttribute: "memberUid"
+  connectionTimeout: 1000
+
+rancher_ldap_admin_body:
+  name: "username"
+  kind: "admin"
+  externalId: "CN=youname,OU=Users,DC=domain,DC=com"
+  externalIdType: "openldap_user"

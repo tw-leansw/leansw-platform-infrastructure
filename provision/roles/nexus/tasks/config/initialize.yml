@@ -1,6 +1,6 @@
 - name: initialize nexus environment
   uri:
-    url: "http://localhost:8081/service/siesta/rest/v1/script/initialize/run"
+    url: "http://localhost:{{ nexus_port }}/service/siesta/rest/v1/script/initialize/run"
     method: POST
     user: "{{ nexus_admin_user }}"
     password: "{{ nexus_admin_pass }}"

@@ -32,7 +32,7 @@
 
 - name: remove nexus server groovy script
   uri:
-    url: "http://localhost:8081/service/siesta/rest/v1/script/{{ item }}"
+    url: "http://localhost:{{ nexus_port }}/service/siesta/rest/v1/script/{{ item }}"
     method: DELETE
     user: "{{ nexus_admin_user }}"
     password: "{{ nexus_admin_pass }}"
@@ -47,7 +47,7 @@
 
 - name: publish nexus server groovy script
   uri:
-    url: "http://localhost:8081/service/siesta/rest/v1/script"
+    url: "http://localhost:{{ nexus_port }}/service/siesta/rest/v1/script"
     method: POST
     user: "{{ nexus_admin_user }}"
     password: "{{ nexus_admin_pass }}"
@@ -67,7 +67,7 @@
 
 - name: initialize nexus environment
   uri:
-    url: "http://localhost:8081/service/siesta/rest/v1/script/initialize/run"
+    url: "http://localhost:{{ nexus_port }}/service/siesta/rest/v1/script/initialize/run"
     method: POST
     user: "{{ nexus_admin_user }}"
     password: "{{ nexus_admin_pass }}"

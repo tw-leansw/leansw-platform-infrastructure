@@ -13,12 +13,12 @@
         fstype: ext4
         mount_options: defaults
         mount: /data
-    docker_opts: "--registry-mirror=http://repo01:5000 --insecure-registry=repo01:5000"
+    docker_opts: "--registry-mirror=http://toc-repo01:5000 --insecure-registry=toc-repo01:5000"
     docker_registries:
       - host: "https://index.docker.io/v1/"
         auth: "Zmx5MndpbmQ6cHdjNTAycg=="
         email: "fly2wind@gmail.com"
-      - host: "http://repo01:5000/"
+      - host: "http://toc-repo01:5000/"
         auth: "Zmx5MndpbmQ6cHdjNTAycg=="
         email: "fly2wind@gmail.com"
     docker_additonal_directory: /data/docker
@@ -31,6 +31,7 @@
   become: true
   gather_facts: no
   vars:
+    nexus_port: 80
     nexus_data_dir: "/data/lib/nexus"
     nexus_local_users:
       - username: fly2wind
@@ -49,3 +50,11 @@
   gather_facts: no
   roles:
     - rancher
+
+- hosts: slaves
+  become: true
+  gather_facts: no
+  vars:
+    rancher_server_url: "http://10.202.128.174:8080"
+  roles:
+    - rancher-agent
